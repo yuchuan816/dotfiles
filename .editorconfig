@@ -1,0 +1,21 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf            # 强制 Unix 换行符
+insert_final_newline = true # 文件末尾强制留一行空行（POSIX 标准）
+trim_trailing_whitespace = true # 自动删掉行尾多余空格
+
+# 针对 Shell 脚本和 zshrc
+[*.{sh,zsh,zshrc,bashrc}]
+indent_style = space
+indent_size = 4
+
+# 针对 Vim 配置
+[vimrc]
+indent_style = space
+indent_size = 4
+
+# 针对 Git 配置
+[.gitconfig]
+indent_style = tab          # Git 配置习惯用 Tab
