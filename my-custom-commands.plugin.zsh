@@ -60,12 +60,12 @@
     alias update-configs=" \
         echo '正在拉取 Vim 配置...'; \
         curl -fLo ~/.vimrc \
-            https://raw.githubusercontent.com/yuchuan816/knowledge-base/refs/heads/master/config/.vimrc; \
+            https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/.vimrc; \
         \
         echo '正在拉取 Zsh 插件自定义命令...'; \
         mkdir -p ~/.oh-my-zsh/custom/plugins/my-custom-commands; \
         curl -fLo ~/.oh-my-zsh/custom/plugins/my-custom-commands/my-custom-commands.plugin.zsh \
-            https://raw.githubusercontent.com/yuchuan816/knowledge-base/refs/heads/master/config/my-custom-commands.plugin.zsh; \
+            https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/my-custom-commands.plugin.zsh; \
         \
         echo '✅ 所有配置已更新！'; \
     "
