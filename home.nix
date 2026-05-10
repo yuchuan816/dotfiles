@@ -3,43 +3,61 @@
 {
   home.username = "tom";
   home.homeDirectory = "/home/tom";
-  home.stateVersion = "25.11"; # 保持与系统版本一致
+  home.stateVersion = "25.11"; 
+
+  # --- 软件包安装 ---
   home.packages = with pkgs; [
-    zsh-you-should-use
+    # 放置没有专门 programs 配置的工具
+    htop
+    tree
   ];
 
-  # home-manager
+  # --- 基础程序管理 ---
   programs.home-manager.enable = true;
 
-  # Vim
+  # Git 配置
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name = "Liu Yuchuan";
+        email = "liuyuchuan816@live.com";
+      };
+      init.defaultBranch = "master";
+      core.editor = "vim";
+      pull.rebase = true;
+      rebase.autoStash = true; # 推荐加上，pull --rebase 时更无感
+    };
+  };
+
+  # Vim 配置
   programs.vim = {
     enable = true;
-    # 引用当前目录下的 .vimrc 文件
     extraConfig = builtins.readFile ./.vimrc;
   };
 
-  # Zsh
+  # --- Shell (Zsh) 配置 ---
   programs.zsh = {
     enable = true;
-
+    
+    # 插件管理
     plugins = [
-      # 1. 来自 Nixpkgs 仓库的插件
       {
         name = "you-should-use";
         src = pkgs.zsh-you-should-use;
         file = "share/zsh/plugins/you-should-use/you-should-use.plugin.zsh";
       }
-      # 2. 来自你本地文件的插件
       {
         name = "my-custom-commands";
-        src = ./.; # 告诉 Nix 源文件在当前目录
-        file = "my-custom-commands.plugin.zsh"; # 指定具体的脚本名
+        src = ./.; 
+        file = "my-custom-commands.plugin.zsh";
       }
     ];
 
+    # Oh-My-Zsh 配置
     oh-my-zsh = {
       enable = true;
-
+      theme = "robbyrussell";
       plugins = [
         "git"
         "sudo"
@@ -47,22 +65,6 @@
         "colored-man-pages"
         "z"
       ];
-      theme = "robbyrussell";
-    };
-  };
-
-  # Git
-  programs.git = {
-    enable = true;
-    # Home Manager 的标准选项
-    userName = "Liu Yuchuan";
-    userEmail = "liuyuchuan816@live.com";
-
-    extraConfig = {
-      init = {
-        defaultBranch = "master";
-      };
-      core = { editor = "vim"; };
     };
   };
 }
