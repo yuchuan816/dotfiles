@@ -26,7 +26,7 @@
       init.defaultBranch = "master";
       core.editor = "vim";
       pull.rebase = true;
-      rebase.autoStash = true; # 推荐加上，pull --rebase 时更无感
+      rebase.autoStash = true;
     };
   };
 
@@ -39,7 +39,8 @@
   # --- Shell (Zsh) 配置 ---
   programs.zsh = {
     enable = true;
-    
+    syntaxHighlighting.enable = true;
+
     # 插件管理
     plugins = [
       {
@@ -53,6 +54,14 @@
         file = "my-custom-commands.plugin.zsh";
       }
     ];
+
+    # 常用别名
+    shellAliases = {
+      # 快速应用 NixOS 配置的快捷命令
+      nrs = "sudo nixos-rebuild switch --flake .#nixos";
+      # 快速清理
+      nclean = "sudo nix-collect-garbage -d";
+    };
 
     # Oh-My-Zsh 配置
     oh-my-zsh = {
