@@ -48,17 +48,6 @@
     alias myip='curl -L ip.p3terx.com'
 
     #######################################
-    # Mac Homebrew 镜像源修改
-    #######################################
-    if is_mac; then
-        # Homebrew 镜像源
-        export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
-        export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
-        export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
-        export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
-    fi
-
-    #######################################
     # 同步远程配置
     #######################################
     update-configs() {
@@ -71,7 +60,7 @@
             return 1
         fi
 
-        echo '🚀 开始同步 macOS 配置...'
+        echo '🚀 开始同步配置...'
         
         # 1. 更新 Vim 配置
         echo '正在拉取 Vim 配置...'
@@ -84,7 +73,7 @@
             mkdir -p ~/.oh-my-zsh/custom/plugins/my-custom-commands
             # 使用 \mv 避开别名检查
             \mv "$tmp_file" ~/.oh-my-zsh/custom/plugins/my-custom-commands/my-custom-commands.plugin.zsh
-            echo '✅ 配置已更新！请执行: source ~/.zshrc'
+            echo '✅ 配置已更新！请执行: omz reload 生效'
         else
             echo '❌ 更新失败，请检查网络连接'
             rm -f "$tmp_file"
