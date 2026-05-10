@@ -17,17 +17,6 @@
   services.openssh.enable = true;
   services.vscode-server.enable = true;
 
-  # 存储优化
-  nix.settings = {
-    auto-optimise-store = true; # 自动优化存储（去重相同文件，节省硬盘空间）
-  };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d"; # 自动删除 7 天前的生成版本
-  };
-
   # 用户定义 (仅定义身份)
   users.users.tom = {
     isNormalUser = true;
@@ -39,9 +28,8 @@
   programs.zsh.enable = true;
 
   fonts.packages = with pkgs; [
-    # 安装 Nerd Fonts 补丁过的字体，支持终端图标
-    (nerdfonts.override { fonts = [ "JetBrainsMono" "FiraCode" ]; })
-    # 中文字体
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
     wqy_zenhei
   ];
 
@@ -58,8 +46,25 @@
     experimental-features = [ "nix-command" "flakes" ];
     substituters = [
       "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+      "https://nix-community.cachix.org"
       "https://cache.nixos.org/"
     ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
+
+    trusted-users = [ "root" "@wheel" ];
+
+    # 自动优化存储（去重相同文件，节省硬盘空间）
+    auto-optimise-store = true;
+  };
+
+  # 自动删除 7 天前的生成版本
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
   };
 
   system.stateVersion = "25.11";
