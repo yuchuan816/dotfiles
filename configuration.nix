@@ -17,7 +17,7 @@
   services.openssh.enable = true;
   services.vscode-server.enable = true;
 
-  # 用户定义 (仅定义身份)
+  # 用户定义
   users.users.tom = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ];
@@ -56,7 +56,7 @@
 
     trusted-users = [ "root" "@wheel" ];
 
-    # 自动优化存储（去重相同文件，节省硬盘空间）
+    # 自动优化存储（去重相同文件）
     auto-optimise-store = true;
   };
 

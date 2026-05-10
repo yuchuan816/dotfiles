@@ -56,7 +56,7 @@
 
     # 常用别名
     shellAliases = {
-      # 快速应用 NixOS 配置的快捷命令
+      # 快速应用 NixOS 配置
       nrs = "sudo nixos-rebuild switch --flake .#nixos";
       # 快速清理
       nclean = "sudo nix-collect-garbage -d";

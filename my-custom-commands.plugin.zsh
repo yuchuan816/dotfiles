@@ -9,6 +9,7 @@
     is_mac()   { [[ "$_OS_PLATFORM" == "darwin"  ]]; }
     is_wsl()   { grep -qi "microsoft" /proc/version 2>/dev/null; }
     is_nas()   { [[ "$(hostname)" == "nas-home" ]]; }
+    is_nixos() { [[ -f /etc/NIXOS ]]; }
 
     #######################################
     # 代理
@@ -60,21 +61,38 @@
     #######################################
     # 同步远程配置
     #######################################
-    alias update-configs=" \
-        echo '正在拉取 Vim 配置...'; \
-        curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/.vimrc; \
-        \
-        echo '正在拉取 Zsh 插件自定义命令...'; \
-        local tmp_file=\$(mktemp); \
-        if curl -fLo \"\$tmp_file\" https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/my-custom-commands.plugin.zsh; then \
-            mkdir -p ~/.oh-my-zsh/custom/plugins/my-custom-commands; \
-            \mv \"\$tmp_file\" ~/.oh-my-zsh/custom/plugins/my-custom-commands/my-custom-commands.plugin.zsh; \
-            echo '✅ 所有配置已更新！请执行 omz reload 生效。'; \
-        else \
-            echo '❌ 更新失败，请检查网络连接'; \
-            rm -f \"\$tmp_file\"; \
-        fi \
-    "
+    update-configs() {
+        if is_nixos; then
+            echo "--------------------------------------------------"
+            echo "【拒绝执行】检测到当前为 NixOS 环境"
+            echo "原因：配置文件由 Home Manager 声明式管理，禁止手动覆盖。"
+            echo "建议：请修改 ~/dotfiles 目录下的配置后执行 'nrs'。"
+            echo "--------------------------------------------------"
+            return 1
+        fi
+
+        echo '🚀 开始同步 macOS 配置...'
+        
+        # 1. 更新 Vim 配置
+        echo '正在拉取 Vim 配置...'
+        curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/.vimrc
+
+        # 2. 更新本脚本自身
+        echo '正在拉取 Zsh 插件自定义命令...'
+        local tmp_file=$(mktemp)
+        if curl -fLo "$tmp_file" https://raw.githubusercontent.com/yuchuan816/dotfiles/refs/heads/master/my-custom-commands.plugin.zsh; then
+            mkdir -p ~/.oh-my-zsh/custom/plugins/my-custom-commands
+            # 使用 \mv 避开别名检查
+            \mv "$tmp_file" ~/.oh-my-zsh/custom/plugins/my-custom-commands/my-custom-commands.plugin.zsh
+            echo '✅ 配置已更新！请执行: source ~/.zshrc'
+        else
+            echo '❌ 更新失败，请检查网络连接'
+            rm -f "$tmp_file"
+            return 1
+        fi
+    }
+
+    alias upconf='update-configs'
 
     #######################################
     # SSH
